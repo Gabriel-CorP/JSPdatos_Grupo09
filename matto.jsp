@@ -22,7 +22,7 @@ String ls_password = "";
 String ls_dbdriver = "sun.jdbc.odbc.JdbcOdbcDriver";
  
 /* Paso 3) Crear query&nbsp; */
-try{
+try{//programar aqui las funciones de los formularios, ls_action
 	if (ls_action.equals("Crear")) {
 	ls_query = " insert into libros (isbn, titulo, autor, id_editorial, anioPublic)";
 	ls_query += " values (";
@@ -46,7 +46,7 @@ try{
 	ls_query += ", anioPublic = " + "'" + ls_anioPublic+ "'";
 	ls_query += " where isbn = " + "'" + ls_isbn + "'";
 	}
-}catch(Exception e){
+}catch(Exception e){//programar aqui las funciones de la columna accion, osea eliminar y actualizar
 	ls_query = " delete from libros where isbn = ";
 	ls_query += "'" + request.getParameter("isbn2") + "'";	
 }

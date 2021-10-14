@@ -86,12 +86,20 @@ Connection conexion = getConnection(path);
    if (!conexion.isClosed()){
 out.write("OK");
 //out.write(path);//'
- 
+      String orden="";
+      
+      if(request.getParameter("orden")!=null){
+        orden = request.getParameter("orden");
+      }
+      else{
+          orden = "ASC";
+      }
+      
       Statement st = conexion.createStatement();
-      ResultSet rs = st.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id" );
+      ResultSet rs = st.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id order by titulo "+orden);
 
       // Ponemos los resultados en un table de html
-      out.println("<table border=\"1\"><tr><td>Num.</td><td>ISBN</td><td>Titulo</td><td>Autor</td><td>Editorial</td><td>Anio de publicacion</td><td>Acci�n</td></tr>");
+      out.println("<table border=\"1\"><tr><td>Num.</td><td>ISBN</td><td><a href=libros.jsp?orden=ASC>Titulo ascendente</a><br><a href=libros.jsp?orden=DESC>Titulo descendente</a></td><td>Autor</td><td>Editorial</td><td>Anio de publicacion</td><td>Acci�n</td></tr>");
       int i=1;
       String isbn = "";
       while (rs.next())
