@@ -18,6 +18,10 @@
  <td>T�tulo<input type="text" name="titulo" value="" size="50"/></td>
  </tr>
  <tr>
+  <td class="etiqueta">Autor 
+    <input onkeyup="mensajeCreate()" id="id_autor" name="autor" size="50" type="text" value="" /></td>
+  </tr>
+ <tr>
       <td class="etiqueta">Editorial 
           <%
           ServletContext context2 = request.getServletContext();
@@ -87,7 +91,7 @@ out.write("OK");
       ResultSet rs = st.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id" );
 
       // Ponemos los resultados en un table de html
-      out.println("<table border=\"1\"><tr><td>Num.</td><td>ISBN</td><td>Titulo</td><td>Editorial</td><td>Anio de publicacion</td><td>Acci�n</td></tr>");
+      out.println("<table border=\"1\"><tr><td>Num.</td><td>ISBN</td><td>Titulo</td><td>Autor</td><td>Editorial</td><td>Anio de publicacion</td><td>Acci�n</td></tr>");
       int i=1;
       while (rs.next())
       {
@@ -95,6 +99,7 @@ out.write("OK");
          out.println("<td>"+ i +"</td>");
          out.println("<td>"+rs.getString("isbn")+"</td>");
          out.println("<td>"+rs.getString("titulo")+"</td>");
+         out.println("<td>"+rs.getString("autor")+"</td>");
          out.println("<td>"+rs.getString("nombre")+"</td>");
          out.println("<td>"+rs.getString("anioPublic")+"</td>");
          out.println("<td>"+"Actualizar<br>Eliminar"+"</td>");
