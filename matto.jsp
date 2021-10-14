@@ -19,24 +19,29 @@ String ls_password = "";
 String ls_dbdriver = "sun.jdbc.odbc.JdbcOdbcDriver";
  
 /* Paso 3) Crear query&nbsp; */
-if (ls_action.equals("Crear")) {
-ls_query = " insert into libros (isbn, titulo)";
-ls_query += " values (";
-ls_query += "'" + ls_isbn + "',";
-ls_query += "'" + ls_titulo + "')";
+try{
+	if (ls_action.equals("Crear")) {
+	ls_query = " insert into libros (isbn, titulo)";
+	ls_query += " values (";
+	ls_query += "'" + ls_isbn + "',";
+	ls_query += "'" + ls_titulo + "')";
+	}
+	 
+	if (ls_action.equals("Eliminar")) {
+	ls_query = " delete from libros where isbn = ";
+	ls_query += "'" + ls_isbn + "'";
+	}
+
+	if (ls_action.equals("Actualizar")) {
+	ls_query = " update libros";
+	ls_query += " set titulo= " + "'" + ls_titulo + "'";
+	ls_query += " where isbn = " + "'" + ls_isbn + "'";
 }
- 
-if (ls_action.equals("Eliminar")) {
-ls_query = " delete from libros where isbn = ";
-ls_query += "'" + ls_isbn + "'";
+}catch(Exception e){
+	ls_query = " delete from libros where isbn = ";
+	ls_query += "'" + request.getParameter("isbn") + "'";	
 }
- 
-if (ls_action.equals("Actualizar")) {
-ls_query = " update libros";
-ls_query += " set titulo= " + "'" + ls_titulo + "'";
-ls_query += " where isbn = " + "'" + ls_isbn + "'";
-}
- 
+
 /* Paso4) Conexión a la base de datos */
 Connection l_dbconn = null;
  

@@ -54,26 +54,27 @@ String path = context.getRealPath("/data");
 Connection conexion = getConnection(path);
    if (!conexion.isClosed()){
 out.write("OK");
-//out.write(path+"\\datos.mdb");
+//out.write(path);//'
  
       Statement st = conexion.createStatement();
-      ResultSet rs = st.executeQuery("select * from libros" );
+      ResultSet rs = st.executeQuery("select * from libros");
 
       // Ponemos los resultados en un table de html
       out.println("<table border=\"1\"><tr><td>Num.</td><td>ISBN</td><td>Titulo</td><td>Acción</td></tr>");
       int i=1;
+      String isbn = "";
       while (rs.next())
       {
+         isbn = rs.getString("isbn");
          out.println("<tr>");
          out.println("<td>"+ i +"</td>");
-         out.println("<td>"+rs.getString("isbn")+"</td>");
+         out.println("<td>"+isbn+"</td>");
          out.println("<td>"+rs.getString("titulo")+"</td>");
-         out.println("<td>"+"Actualizar<br>Eliminar"+"</td>");
+         out.println("<td>"+"Actualizar<br><a href=matto.jsp?isbn="+isbn+">Eliminar</a>"+"</td>");
          out.println("</tr>");
          i++;
       }
       out.println("</table>");
-
       // cierre de la conexion
       conexion.close();
 }
