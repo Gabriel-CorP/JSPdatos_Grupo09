@@ -10,11 +10,11 @@
   <form action="matto.jsp" method="post" name="Actualizar">
     <table>
     <tr>
-      <td>ISBN<input type="text" name="isbn" value="" size="40"/>
+      <td>ISBN<input id="id_isbn" type="text" name="isbn" value="" size="40"/>
       </td>
     </tr>
     <tr>
-      <td>T�tulo<input type="text" name="titulo" value="" size="50"/></td>
+      <td>T�tulo<input id="id_titulo" type="text" name="titulo" value="" size="50"/></td>
     </tr>
     <tr>
       <td class="etiqueta">Autor 
@@ -44,7 +44,7 @@
     <td class="etiqueta">Anio de Publicacion  
               <input onkeyup="mensajeCreate()" id="id_anioPublic" name="anioPublic" size="30" type="text" value="" /></td>
     </tr>
-    <tr><td> Action <input type="radio" name="Action" value="Actualizar" /> Actualizar
+    <tr><td> Action <input id="id_Actualizar" type="radio" name="Action" value="Actualizar" /> Actualizar
       <input type="radio" name="Action" value="Eliminar" /> Eliminar
       <input type="radio" name="Action" value="Crear" checked /> Crear
         </td>
@@ -56,6 +56,117 @@
     </table>
   </form>
   <br><br>
+  
+  <form action="libros.jsp" name="formbusca" method="GET">
+    <table>
+      <tbody>
+        <tr><td class="etiqueta">ISBN: 
+          <td>
+            <input type="text" id="idISBN" name="isbn_form_2" placeholder="ISBN del Libro:">
+          </td>
+        </td></tr>
+
+        <tr><td class="etiqueta">Titulo: 
+          <td>
+            <input type="text" id="idTitulo" name="titulo_form_2" placeholder="Titulo del Libro:">
+          </td>
+        </td></tr>
+		
+		<tr><td class="etiqueta">Autor: 
+          <td>
+            <input  type="text" id="idAutor" name="autor2_form_2" placeholder="Autor del Libro:">
+          </td>
+        </td></tr>
+
+    </tbody>
+    </table>
+
+    <input type="submit" id="ActionBuscar" value="Buscar">
+    <input type="reset" value="Restaurar">
+  </form>
+  
+  <h2 style="text-align:center;"><span style="color:red;">Lista de Libros</span></h2>
+  
+<br><br>
+
+  <%
+    ServletContext context = request.getServletContext();
+    String path = context.getRealPath("/data");
+    Connection conexion = getConnection(path);
+
+
+    if (!conexion.isClosed())
+    {
+      String buscarISBN= request.getParameter("isbn_form_2");
+      String buscarTitulo= request.getParameter("titulo_form_2");
+      String buscarAutor= request.getParameter("autor2_form_2");
+      if(buscarTitulo==null || buscarISBN==null||buscarAutor==null){
+
+      Statement st = conexion.createStatement();
+      ResultSet rs = st.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id" );
+      
+      out.println("<table id='tabla_id' border=\"1\"><tr><th>Num.</th><th>ISBN</th>"+"<th onclick='ordenarTabla(2);'>"+"<a href=\'#!\'>"+"Titulo"+"</a> </th>"+"<th>Autor</th>"+"<th>Editorial</th>"+"<th>Año Public</th>"+"<th>Acciones</th></tr>");
+      int i=1;
+      while (rs.next())
+      {
+        String isbn = rs.getString("isbn");
+        String titulo = rs.getString("titulo");
+        String autor = rs.getString("autor");
+        String editorial = rs.getString("nombre");
+        String id = rs.getString("id");
+        String anioPublic = rs.getString("anioPublic");
+        %>
+  <tr>
+    <td><% out.println(i); %></td>
+    <td id='isbn_id<% out.println(i); %>'><% out.println(isbn); %></td>
+    <td id='titulo_id<%out.println(i);%>'><% out.println(titulo); %></td>
+    <td id='autor_id<%out.println(i);%>'><% out.println(autor); %></td>
+    <td id='editorial_id<%out.println(i);%>'><% out.println(editorial); %></td>
+    <td id='anioPublic_id<%out.println(i);%>'><% out.println(anioPublic); %></td>
+    <td>
+      <a href='#' id='<%out.println(i);%>' name='<% out.println(id); %>' onclick='actualizar(this, <% out.println(id); %>);'>Actualizar</a> | <% out.println("<a id="+"delete"+" href='matto.jsp?isbn="+isbn+"&titulo="+titulo+"&autor="+autor+"&nombre="+editorial+"&anioPublic="+anioPublic+"+&Action=Eliminar'>"+"Eliminar"+"</a>"); 
+      %>
+    </td>
+  </tr>
+  <%
+        i++;
+      }
+      out.println("</table> <br><br>");
+      } else {
+        Statement st2 = conexion.createStatement();
+        ResultSet rs=st2.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id where isbn LIKE"+"'"+buscarISBN+"'" +"OR titulo LIKE"+"'"+buscarTitulo+"'"+"OR autor LIKE "+"'"+buscarAutor+"'" );
+        out.println("<table id='tabla_id' border=\"1\"><tr><th>Num.</th><th>ISBN</th>"+"<th onclick='ordenarTabla(2);'>"+"<a href=\'#!\'>"+"Titulo"+"</a> </th>"+"<th>Autor</th>"+"<th>Editorial</th>"+"<th>Año Public</th>"+"<th>Acciones</th></tr>");
+      int i=1;
+      while (rs.next())
+      {
+        String isbn = rs.getString("isbn");
+        String titulo = rs.getString("titulo");
+        String autor = rs.getString("autor");
+        String editorial = rs.getString("nombre");
+        String id = rs.getString("id");
+        String anioPublic = rs.getString("anioPublic");
+%>
+  <tr>
+    <td><% out.println(i); %></td>
+    <td id='isbn_id<% out.println(i); %>'><% out.println(isbn); %></td>
+    <td id='titulo_id<%out.println(i);%>'><% out.println(titulo); %></td>
+    <td id='autor_id<%out.println(i);%>'><% out.println(autor); %></td>
+    <td id='editorial_id<%out.println(i);%>'><% out.println(editorial); %></td>
+    <td id='anioPublic_id<%out.println(i);%>'><% out.println(anioPublic); %></td>
+    <td>
+      <a href='#' id='<%out.println(i);%>' name='<% out.println(id); %>' onclick='actualizar(this, <% out.println(id); %>);'>Actualizar</a> | <% out.println("<a id="+"delete"+" href='matto.jsp?isbn="+isbn+"&titulo="+titulo+"&autor="+autor+"&nombre="+editorial+"&anioPublic="+anioPublic+"+&Action=Eliminar'>"+"Eliminar"+"</a>"); 
+      %>
+    </td>
+  </tr>
+  <%
+        i++;
+      }
+      out.println("</table> <br><br>");
+      out.println("<a href="+"libros.jsp"+"> < Volver </a>");
+      }
+      conexion.close();
+    }
+  %>
 
   <%!
     public Connection getConnection(String path) throws SQLException {
@@ -74,51 +185,6 @@
       return conn;
     }
   %>
-
-  <%
-  ServletContext context = request.getServletContext();
-  String path = context.getRealPath("/data");
-  Connection conexion = getConnection(path);
-  if (!conexion.isClosed()){
-    out.write("OK");
-    //out.write(path);//
-    String orden="";
-         
-      if(request.getParameter("orden")!=null){
-        orden = request.getParameter("orden");
-      }
-      else{
-          orden = "ASC";
-      }
-      Statement st = conexion.createStatement();
-      ResultSet rs = st.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id order by titulo "+orden);
-
-      // Ponemos los resultados en un table de html
-      out.println("<table border=\"1\"><tr><td>Num.</td><td>ISBN</td><td><a href=libros.jsp?orden=ASC>Titulo ascendente</a><br><a href=libros.jsp?orden=DESC>Titulo descendente</a></td><td>Autor</td><td>Editorial</td><td>Anio de publicacion</td><td>Acci�n</td></tr>");
-      int i=1;
-      String isbn = "";
-      while (rs.next())
-      {
-        isbn = rs.getString("isbn");
-        out.println("<tr>");
-        out.println("<td>"+ i +"</td>");
-        out.println("<td>"+isbn+"</td>");
-        out.println("<td>"+rs.getString("titulo")+"</td>");
-        out.println("<td>"+rs.getString("autor")+"</td>");
-        out.println("<td>"+rs.getString("nombre")+"</td>");
-        out.println("<td>"+rs.getString("anioPublic")+"</td>");
-        out.println("<td>"+"Actualizar<br><a href=matto.jsp?isbn2="+isbn+">Eliminar</a>"+"</td>");
-        out.println("</tr>");
-        i++;
-      }
-      out.println("</table>");
-      // cierre de la conexion
-      conexion.close();
-    }
-  %>
-
-
-
 
 
   <script>//Script Habilitar/Deshabilitar botón Buscar
@@ -164,4 +230,53 @@
         }
       }
     </script>
+	
+	<script type="text/javascript">//Funcion Actualizar
+  function actualizar(elemento, tam)
+  {
+    document.getElementById("id_isbn").value=document.getElementById("isbn_id"+elemento.id).innerHTML;
+    document.getElementById("id_titulo").value=document.getElementById("titulo_id"+elemento.id).innerHTML;
+    document.getElementById("id_Actualizar").checked=true;
+  }
+  </script>
+  
+  <script>
+  function ordenarTabla(c) 
+  {
+    var tabla, rows, emparejado, i, j, k, emparejar, dir, conteo = 0;
+    emparejado = true; 
+    dir = "asc";
+	tabla = document.getElementById('tabla_id');
+    while (emparejado) {
+      emparejado = false;
+      rows = tabla.rows;
+      for (i = 1; i < (rows.length - 1); i++) {
+      emparejar = false;
+      j = rows[i].getElementsByTagName("TD")[c];
+      k = rows[i + 1].getElementsByTagName("TD")[c];
+      if (dir == "asc") {
+         if (j.innerHTML.toLowerCase() > k.innerHTML.toLowerCase()) {
+            emparejar = true;
+          break;
+          }
+        } else if (dir == "desc") {
+          if (j.innerHTML.toLowerCase() < k.innerHTML.toLowerCase()) {
+            emparejar = true;
+          break;
+        }
+      }
+    }
+    if (emparejar) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      emparejado = true;
+      conteo ++;
+    } else {
+      if (conteo == 0 && dir == "asc") {
+        dir = "desc";
+        emparejado = true;
+      }
+    }
+  }
+}
+</script>
   </body>
