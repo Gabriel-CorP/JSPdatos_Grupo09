@@ -62,26 +62,26 @@
       <tbody>
         <tr><td class="etiqueta">ISBN: 
           <td>
-            <input type="text" id="idISBN" name="isbn_form_2" placeholder="ISBN del Libro:">
+            <input onkeyup="funtionHabilitar()" type="text" id="idISBN" name="isbn_form_2" placeholder="ISBN del Libro:">
           </td>
         </td></tr>
 
         <tr><td class="etiqueta">Titulo: 
           <td>
-            <input type="text" id="idTitulo" name="titulo_form_2" placeholder="Titulo del Libro:">
+            <input onkeyup="funtionHabilitar()" type="text" id="idTitulo" name="titulo_form_2" placeholder="Titulo del Libro:">
           </td>
         </td></tr>
 		
 		<tr><td class="etiqueta">Autor: 
           <td>
-            <input  type="text" id="idAutor" name="autor2_form_2" placeholder="Autor del Libro:">
+            <input onkeyup="funtionHabilitar()" type="text" id="idAutor" name="autor2_form_2" placeholder="Autor del Libro:">
           </td>
         </td></tr>
 
     </tbody>
     </table>
 
-    <input type="submit" id="ActionBuscar" value="Buscar">
+    <input type="submit" id="ActionBuscar" value="Buscar" disabled>
     <input type="reset" value="Restaurar">
   </form>
   
@@ -134,6 +134,7 @@
       out.println("</table> <br><br>");
       } else {
         Statement st2 = conexion.createStatement();
+        
         ResultSet rs=st2.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id where isbn LIKE"+"'"+buscarISBN+"'" +"OR titulo LIKE"+"'"+buscarTitulo+"'"+"OR autor LIKE "+"'"+buscarAutor+"'" );
         out.println("<table id='tabla_id' border=\"1\"><tr><th>Num.</th><th>ISBN</th>"+"<th onclick='ordenarTabla(2);'>"+"<a href=\'#!\'>"+"Titulo"+"</a> </th>"+"<th>Autor</th>"+"<th>Editorial</th>"+"<th>Año Public</th>"+"<th>Acciones</th></tr>");
       int i=1;
@@ -188,7 +189,7 @@
 
 
   <script>//Script Habilitar/Deshabilitar botón Buscar
-    function mensajeChange() {
+    function funtionHabilitar() {
           console.log("change");
           const campo1 = document.getElementById("idISBN");
           const campo2 = document.getElementById("idTitulo");
