@@ -1,24 +1,42 @@
 <%@page contentType="text/html" pageEncoding="iso-8859-1" import="java.sql.*,net.ucanaccess.jdbc.*" %>
  <html>
+     <script>
+        function requerido()
+        {
+            var empti = document.forms["Actualizar"]["isbn"].value;
+            var emptt = document.forms["Actualizar"]["titulo"].value;
+            var empta = document.forms["Actualizar"]["autor"].value;
+            var emptp = document.forms["Actualizar"]["anioPublic"].value;
+            if (empti == "" || emptt == "" || empta == "" || emptp == "")
+            {
+                alert("Please input a Value");
+                return false;
+            }
+            else 
+            {
+                return true; 
+            }
+        }
+     </script>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Actualizar, Eliminar, Crear registros.</title>
+    <link rel="stylesheet" href="style.css">
   </head>
  <body>
   <H1>MANTENIMIENTO DE LIBROS</H1>
-  <a type=url style="margin-left: 10px;" href="listado-csv.jsp" download="listadoLibros.csv">Descargar Listado CSV</a>
-  <form action="matto.jsp" method="post" name="Actualizar">
+  <form action="matto.jsp" method="post" name="Actualizar" onsubmit="return requerido()">
     <table>
     <tr>
-      <td>ISBN<input id="id_isbn" type="text" name="isbn" value="" size="40"/>
+        <td>ISBN<input id="id_isbn" type="text" name="isbn" value="" size="40" pattern="[0-9]{10,13}" onsubmit="return requerido()"/>
       </td>
     </tr>
     <tr>
-      <td>T�tulo<input id="id_titulo" type="text" name="titulo" value="" size="50"/></td>
+      <td>T&iacute;tulo<input id="id_titulo" type="text" name="titulo" value="" size="50" minlength="1" onsubmit="return requerido()"/></td>
     </tr>
     <tr>
       <td class="etiqueta">Autor 
-        <input onkeyup="mensajeCreate()" id="id_autor" name="autor" size="50" type="text" value="" /></td>
+          <input onkeyup="mensajeCreate()" id="id_autor" name="autor" size="50" type="text" value="" minlength="1" onsubmit=" return requerido()"/></td>
     </tr>
     <tr>
       <td class="etiqueta">Editorial 
@@ -41,8 +59,8 @@
     </tr>
     <% } %>
     <tr>
-    <td class="etiqueta">Anio de Publicacion  
-              <input onkeyup="mensajeCreate()" id="id_anioPublic" name="anioPublic" size="30" type="text" value="" /></td>
+    <td class="etiqueta">A&ntilde;o de Publicaci&oacute;n  
+              <input onkeyup="mensajeCreate()" id="id_anioPublic" name="anioPublic" size="30" type="text" value="" pattern="[0-9]{1,4}" onsubmit="return requerido()"/></td>
     </tr>
     <tr><td> Action <input id="id_Actualizar" type="radio" name="Action" value="Actualizar" /> Actualizar
       <input type="radio" name="Action" value="Eliminar" /> Eliminar
@@ -66,7 +84,7 @@
           </td>
         </td></tr>
 
-        <tr><td class="etiqueta">Titulo: 
+        <tr><td class="etiqueta">T&iacute;tulo: 
           <td>
             <input type="text" id="idTitulo" name="titulo_form_2" placeholder="Titulo del Libro:">
           </td>
@@ -86,9 +104,11 @@
   </form>
   
   <h2 style="text-align:center;"><span style="color:red;">Lista de Libros</span></h2>
-  
-<br><br>
-
+<a type=url style="margin-left: 10px;" href="listado-csv.jsp" download="listadoLibros.csv">Descargar Listado CSV</a>
+<a type=url style="margin-left: 10px;" href="listado-txt.jsp" download="listadoLibros.txt">Descargar Listado TXT</a>
+<a type=url style="margin-left: 10px;" href="listado-xml.jsp" download="listadoLibros.xml">Descargar Listado XML</a>
+<a type=url style="margin-left: 10px;" href="listado-json.jsp" download="listadoLibros.json">Descargar Listado JSON</a>
+<br>
   <%
     ServletContext context = request.getServletContext();
     String path = context.getRealPath("/data");
@@ -105,7 +125,7 @@
       Statement st = conexion.createStatement();
       ResultSet rs = st.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id" );
       
-      out.println("<table id='tabla_id' border=\"1\"><tr><th>Num.</th><th>ISBN</th>"+"<th onclick='ordenarTabla(2);'>"+"<a href=\'#!\'>"+"Titulo"+"</a> </th>"+"<th>Autor</th>"+"<th>Editorial</th>"+"<th>Año Public</th>"+"<th>Acciones</th></tr>");
+      out.println("<table id='tabla_id' border=\"1\" border-color=\"black\"><tr><th>N&uacute;m.</th><th>ISBN</th>"+"<th onclick='ordenarTabla(2);'>"+"<a href=\'#!\'>"+"T&iacute;tulo"+"</a> </th>"+"<th>Autor</th>"+"<th>Editorial</th>"+"<th>A&ntilde;o Publicaci&oacute;</th>"+"<th>Acciones</th></tr>");
       int i=1;
       while (rs.next())
       {
@@ -135,7 +155,7 @@
       } else {
         Statement st2 = conexion.createStatement();
         ResultSet rs=st2.executeQuery("select * from libros inner join editorial on libros.id_editorial = editorial.id where isbn LIKE"+"'"+buscarISBN+"'" +"OR titulo LIKE"+"'"+buscarTitulo+"'"+"OR autor LIKE "+"'"+buscarAutor+"'" );
-        out.println("<table id='tabla_id' border=\"1\"><tr><th>Num.</th><th>ISBN</th>"+"<th onclick='ordenarTabla(2);'>"+"<a href=\'#!\'>"+"Titulo"+"</a> </th>"+"<th>Autor</th>"+"<th>Editorial</th>"+"<th>Año Public</th>"+"<th>Acciones</th></tr>");
+        out.println("<table id='tabla_id' border=\"1\"><tr><th>N&uacute;m.</th><th>ISBN</th>"+"<th onclick='ordenarTabla(2);'>"+"<a href=\'#!\'>"+"T&iacute;tulo"+"</a> </th>"+"<th>Autor</th>"+"<th>Editorial</th>"+"<th>A&ntilde;o Publicaci&oacute;</th>"+"<th>Acciones</th></tr>");
       int i=1;
       while (rs.next())
       {
