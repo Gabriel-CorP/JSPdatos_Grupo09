@@ -60,7 +60,7 @@
     <% } %>
     <tr>
     <td class="etiqueta">A&ntilde;o de Publicaci&oacute;n  
-              <input onkeyup="mensajeCreate()" id="id_anioPublic" name="anioPublic" size="30" type="text" value="" pattern="[0-9]{1,4}" onsubmit="return requerido()"/></td>
+              <input onkeyup="mensajeCreate()" id="id_aniopublic" name="anioPublic" size="30" type="text" value="" pattern="[0-9]{1,4}" onsubmit="return requerido()"/></td>
     </tr>
     <tr><td> Action <input id="id_Actualizar" type="radio" name="Action" value="Actualizar" /> Actualizar
       <input type="radio" name="Action" value="Eliminar" /> Eliminar
@@ -217,11 +217,11 @@
           const boton = document.getElementById("ActionBuscar");
           console.log(boton)
           
-          if (campo1.value.trim() !== ""&&campo2.value.trim() !== "") {
+          if (campo1.value.trim() !== " "&&campo2.value.trim() !== " ") {
             console.log("Se muestra")
             boton.removeAttribute('disabled')
           }
-          else if (campo1.value.trim() !== ""&&campo3.value.trim() !== "") {
+          else if (campo1.value.trim() !== " "&&campo3.value.trim() !== " ") {
             console.log("Se muestra")
             boton.removeAttribute('disabled')
           } else {
@@ -237,11 +237,11 @@
         const campo2 = document.getElementById("id_titulo");
         const campo3 = document.getElementById("id_autor");
         const campo4 = document.getElementById("id_editorial");
-        const campo5 = document.getElementById("id_anioPublic");
+        const campo5 = document.getElementById("id_aniopublic");
         const boton = document.getElementById("id_aceptar");
         console.log(boton)
 
-        if (campo1.value.trim() !== "" && campo2.value.trim() !== "" && campo3.value.trim() !== "" && campo4.value.trim() !== "" && campo5.value.trim() !== "") 
+        if (campo1.value.trim() !== " " && campo2.value.trim() !== " " && campo3.value.trim() !== " " && campo4.value.trim() !== " " && campo5.value.trim() !== " ") 
         {
           console.log("Se muestra")
           boton.removeAttribute('disabled')
@@ -257,6 +257,9 @@
   {
     document.getElementById("id_isbn").value=document.getElementById("isbn_id"+elemento.id).innerHTML;
     document.getElementById("id_titulo").value=document.getElementById("titulo_id"+elemento.id).innerHTML;
+	document.getElementById("id_autor").value=document.getElementById("autor_id"+elemento.id).innerHTML;
+    document.getElementById("id_editorial").options[tam-1].selected = 'selected';
+	document.getElementById("id_aniopublic").value=document.getElementById("anioPublic_id"+elemento.id).innerHTML;
     document.getElementById("id_Actualizar").checked=true;
   }
   </script>
